@@ -3,7 +3,8 @@ import json
 from ollama import embed
 import csv
 
-
+## if you wanna switch what embedding you use just change metadata2 to metadata and vice versa for chunks and embeddings below
+## also change the csv filw to another one when switching models
 with open("index/metadata2.json", "r") as f:
     metadata = json.load(f)
 
