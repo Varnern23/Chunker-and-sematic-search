@@ -1,0 +1,11 @@
+{
+  "model": "mxbai-embed-large",
+  "dimension": 1024,
+  "normalized": true,
+  "chunker": {
+    "targetMin": 1200,
+    "targetMax": 1600,
+    "minWords": 50,
+    "overlapSentences": 1
+  }
+}
