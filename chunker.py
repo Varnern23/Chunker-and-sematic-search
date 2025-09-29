@@ -3,7 +3,7 @@ import re
 import statistics
 
 def chunkAholic(filePath, minChar = 1200, maxChar = 1600, minWord = 50):
-    with open(filePath, 'r') as file:
+    with open(filePath, "r", encoding = "utf-8") as file:
         content = file.read()
         paragraphs = [p.strip() for p in content.split('\n\n') if p.strip()] 
         chunks = []
@@ -50,38 +50,65 @@ def chunkAholic(filePath, minChar = 1200, maxChar = 1600, minWord = 50):
                         'end': endIndex 
                     })
                     chunkID += 1
+        fixedChunks = [] 
+        for chunk in chunks:
+            if len(chunk["text"]) > maxChar:
+               text = chunk["text"]
+               for i in range(0, len(text), maxChar):
+                    part = text[i:i+maxChar]
+                    fixedChunks.append({
+                        'ID': chunkID,
+                        'text': part.strip(),
+                        'start': chunk['start'] + i,
+                        'end': chunk['start'] + i + len(part)
+                    })
+                    chunkID += 1
+            else:
+                fixedChunks.append(chunk)
         merged = []
         between = None
-        for chunk in chunks:
-            if len(chunk["text"].split()) < minWord:
+        for chunky in fixedChunks:
+            if len(chunky["text"].split()) < minWord:
                 if between:
-                    between["text"]+= "" + chunk["text"]
-                    between["end"] = chunk["end"]
+                    between["text"]+= " " + chunky["text"]
+                    between["end"] = chunky["end"]
                 else:
-                    between = chunk
+                    between = chunky
             else:
                 if between: 
-                    between["text"] += " " + chunk["text"]
-                    between["end"] = chunk["end"]
+                    between["text"] += " " + chunky["text"]
+                    between["end"] = chunky["end"]
                     merged.append(between)
                     between = None
                 else:
-                    merged.append(chunk)
+                    merged.append(chunky)
         if between:
             merged.append(between)
+        final = []
+        for chunkster in merged:
+            text = chunkster["text"]
+            if len(text) > maxChar:
+                for i in range(0, len(text), maxChar):
+                    part = text[i:i+maxChar]
+                    final.append({
+                        'ID': chunkID,
+                        'text': part.strip(),
+                        'start': chunkster['start'] + i,
+                        'end': chunkster['start'] + i + len(part)
+                    })
+                    chunkID += 1
+            else:
+                final.append(chunkster)
         
-        lengths = [len(c['text']) for c in merged]
+        lengths = [len(c['text']) for c in final]
         print("sanity check:")
-        print(f"Total Chunks: {len(merged)}")
+        print(f"Total Chunks: {len(final)}")
         print(f"Total Splits: {splits}")
         print(f"Average Chunk Length: {int(statistics.mean(lengths))}")
         print(f"minimum Chunk Length: {min(lengths)}")
         print(f"maximum Chunk Length: {max(lengths)}")
-
-        return merged
-
-
+        return final
 if __name__ == "__main__":
     file_path = "/home/nathan.varner/Documents/dsc360/lab03/data/book.txt"
     chunks = chunkAholic(file_path)
-    print(chunks[410])
+    print(chunks[1200])
