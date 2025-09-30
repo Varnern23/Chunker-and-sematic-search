@@ -12,8 +12,8 @@ for chunk in chunks:
     embeddings.append(vec)
 embeddings = np.array(embeddings, dtype = np.float32)
 embeddings = embeddings / np.linalg.norm(embeddings, axis = 1, keepdims = True)
-np.save("index/embeddings2.npy", embeddings)
-with open("index/chunks2.json", "w") as f:
+np.save("index/embeddings23000.npy", embeddings)
+with open("index/chunks23000.json", "w") as f:
     for chunk in chunks:
         json.dump(chunk, f)
         f.write("\n")
@@ -28,5 +28,5 @@ metadata = {
         "overlapSentences": 1
     }
 }
-with open("index/metadata2.json", "w") as f:
+with open("index/metadata23000.json", "w") as f:
     json.dump(metadata, f, indent = 2)
