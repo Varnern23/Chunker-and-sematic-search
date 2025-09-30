@@ -7,18 +7,18 @@ import csv
 ## also change the csv filw to another one when switching models
 with open("index/metadata2.json", "r") as f:
     metadata = json.load(f)
+testingPrompts = ["Father Mapple delivers a powerful sermon about Jonah and the whale", "Captain Ahab gives his quarter-deck speech about killing the whale", "Queequeg becomes ill and has the ship's carpenter build him a coffin", "Captain Ahab's final words", "Ishmael explains what a gam is", "Ishmael and Queequeg cuddle in bed"]
 
 with open("index/chunks2.json", "r", encoding="utf-8") as f:
     chunks = [json.loads(line) for line in f]
 embeddings = np.load("index/embeddings2.npy")
 k = 5
 print("Type your query or type exit to quit:\n")
-labels = ["prompt", "expected", "hit 1", "hit 2", "hit 3", "hit 4", "hit 5"]
+labels = ["prompt", "expected id", "id 1", "hit 1", "id 2", "hit 2", "id 3", "hit 3", "id 4", "hit 4", "id 5", "hit 5", "in 1", "in 5"]
 with open("outputs/baseTest.csv", "w", newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerow(labels)
-    while True:
-        query = input("Enter query: ")
+    for query in testingPrompts:
         if query.lower() == "exit":
             break
         resp = embed(model=metadata["model"], input=query)
@@ -42,8 +42,14 @@ with open("outputs/baseTest.csv", "w", newline='', encoding='utf-8') as f:
             print(f"Text: {chunk["text"]}")
         print("\n")
         writer.writerow( [query, "", 
-                         hits[0]['text'],
-                         hits[1]['text'],
-                         hits[2]['text'],
-                         hits[3]['text'],
-                         hits[4]['text']])
+                            hits[0]['ID'],
+                            hits[0]['text'],
+                            hits[1]['ID'],
+                            hits[1]['text'],
+                            hits[2]['ID'],
+                            hits[2]['text'],
+                            hits[3]['ID'],
+                            hits[3]['text'],
+                            hits[4]['ID'],
+                            hits[4]['text'],
+                            "", ""])
