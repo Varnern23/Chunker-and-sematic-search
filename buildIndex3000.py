@@ -7,7 +7,7 @@ chunks = chunkAholic("/home/nathan.varner/Documents/dsc360/lab03/data/book.txt")
 embeddings = []
 for chunk in chunks: 
     chunkText = chunk["text"]
-    resp = ollama.embed(model = "nomic-embed-text", input = chunkText)
+    resp = ollama.embed(model = "mxbai-embed-large", input = chunkText)
     vec = resp["embeddings"][0]
     embeddings.append(vec)
 embeddings = np.array(embeddings, dtype = np.float32)
@@ -18,7 +18,7 @@ with open("index/chunks3000.json", "w") as f:
         json.dump(chunk, f)
         f.write("\n")
 metadata = {
-    "model": "nomic-embed-text",
+    "model": "mxbai-embed-large",
     "dimension": embeddings.shape[1],
     "normalized": True,
     "chunker":{
