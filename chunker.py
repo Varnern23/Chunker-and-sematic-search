@@ -124,3 +124,4 @@ if __name__ == "__main__":
     file_path = "/home/nathan.varner/Documents/dsc360/lab03/data/book.txt"
     chunks = chunkAholic(file_path)
     print(chunks[1200])
+#got help from re doccumentation, and statistics doccumentation as well as tenghoit kouch
